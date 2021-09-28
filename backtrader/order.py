@@ -384,12 +384,14 @@ class OrderBase(with_metaclass(MetaParams, object)):
         else:
             self.dteos = 0.0
 
-    def clone(self):
+    def clone(self, deep=True):
         # status, triggered and executed are the only moving parts in order
         # status and triggered are covered by copy
         # executed has to be replaced with an intelligent clone of itself
         obj = copy(self)
         obj.executed = self.executed.clone()
+        if deep:
+            obj.info = self.info.copy()
         return obj  # status could change in next to completed
 
     def getstatusname(self, status=None):
